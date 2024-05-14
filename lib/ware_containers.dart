@@ -46,6 +46,22 @@ class Ware {
       subtitle: Text(description),
     );
   }
+
+  Container returnContainer() {
+    //returns a container with the information of the ware
+    //for use with the swipable market
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        color: Color.fromARGB(255, 129, 129, 129),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text(name), Text(description)],
+      ),
+    );
+  }
 }
 
 class Match {
