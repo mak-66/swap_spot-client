@@ -10,7 +10,7 @@ class TradePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trades'),
+        title: const Text('Trade Openings'),
       ),
       body: Center(
           child: ListView.builder(

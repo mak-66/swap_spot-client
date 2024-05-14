@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 126, 79, 208)),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Swapspot v0.1'),
@@ -93,10 +93,19 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _pages[_selectedPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.inventory), label: "Potential Trades"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory),
+            label: "Potential Trades",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_business),
+            label: "Find new Matches",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: "Publish new Ware"),
           BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
         ],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Color.fromARGB(255, 88, 87, 87),
         currentIndex: _selectedPageIndex,
         onTap: _onItemTapped,
       ),
