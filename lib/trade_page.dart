@@ -29,16 +29,10 @@ class TradePage extends StatelessWidget {
               //tileColor: Color.fromARGB(255, 91, 89, 89),
               //title: Text("Tradeoffer $index"),
               leading: Column(
-                children: [
-                  Text(match.bidWare.name),
-                  Text(match.bidWare.description)
-                ],
+                children: [Text(match.bidWare.name), Text(match.bidWare.description)],
               ),
               trailing: Column(
-                children: [
-                  Text(match.ownWare.name),
-                  Text(match.ownWare.description)
-                ],
+                children: [Text(match.ownWare.name), Text(match.ownWare.description)],
               ),
               subtitle: Text("Bidder: ${match.bidder}"),
             ),

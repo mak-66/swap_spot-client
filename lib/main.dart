@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'upload_ware_page.dart';
 import 'trade_page.dart';
 import 'ware_page.dart';
+import 'market_page.dart';
+
+//TODO: Figure out the app icon
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tinder Trading App',
+      title: 'SwapSpot App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -34,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Swapspot v0.1'),
     );
   }
 }
@@ -58,18 +61,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // void _incrementWares() async {
-  //   await Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => const UploadWare()),
-  //   );
-  //   setState(() {});
-  // }
-
   int _selectedPageIndex = 0;
 
   static const List<Widget> _pages = <Widget>[
     TradePage(),
+    MarketPage(),
     UploadWare(),
     WarePage(),
   ];
@@ -97,10 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _pages[_selectedPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.inventory), label: "Potential Trades"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.add), label: "Publish new Ware"),
+          BottomNavigationBarItem(icon: Icon(Icons.inventory), label: "Potential Trades"),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Publish new Ware"),
           BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
         ],
         currentIndex: _selectedPageIndex,
