@@ -1,13 +1,7 @@
-
 import 'package:flutter/material.dart';
-
-final wares = <Ware>[
-  Ware("1", "1des"),
-  Ware("2", "2des"),
-  Ware("3", "3des"),
-  Ware("4", "4des"),
-  Ware("5", "5des")
-];
+import 'upload_ware_page.dart';
+import 'trade_page.dart';
+import 'ware_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Tinder Trading App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -64,22 +58,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _incrementWares() async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const UploadWare()),
-    );
-    setState(() {});
+  // void _incrementWares() async {
+  //   await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const UploadWare()),
+  //   );
+  //   setState(() {});
+  // }
+
+  int _selectedPageIndex = 0;
+
+  static const List<Widget> _pages = <Widget>[
+    TradePage(),
+    UploadWare(),
+    WarePage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -90,184 +94,18 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  style: TextStyle(fontSize: 20),
-                  'Number of wares on open market: ',
-                ),
-                Text(
-                  '${wares.length}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const TradePage()));
-              },
-              label: const Text("Potential Trades"),
-              icon: const Icon(Icons.inventory),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const WarePage()));
-              },
-              label: const Text("Wares"),
-              icon: const Icon(Icons.storage),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementWares,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-      // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class TradePage extends StatelessWidget {
-  const TradePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Trades'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context); // Navigate back to first route when tapped.
-          },
-          child: const Text('Go back!'),
-        ),
-      ),
-    );
-  }
-}
-
-class WarePage extends StatelessWidget {
-  const WarePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Wares'),
-      ),
-      body: Center(
-          child: ListView.builder(
-        itemCount: wares.length,
-        itemBuilder: (context, index) {
-          final ware = wares[index];
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              tileColor: const Color.fromARGB(255, 213, 209, 209),
-              title: Text(ware.name),
-              subtitle: Text(ware.description),
-            ),
-          );
-        },
-      )),
-    );
-  }
-}
-
-class Ware {
-  String name = "";
-  String description = "";
-
-  Ware(this.name, this.description);
-}
-
-class UploadWare extends StatefulWidget {
-  const UploadWare({super.key});
-
-  @override
-  State<UploadWare> createState() => _UploadWareState();
-}
-
-class _UploadWareState extends State<UploadWare> {
-  final myName = TextEditingController();
-  final myDescription = TextEditingController();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    myName.dispose();
-    myDescription.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Upload New Ware'),
-      ),
-      body: Center(
-          child: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: TextField(
-                controller: myName,
-                decoration: const InputDecoration(hintText: "Name"),
-                maxLines: 1,
-              )),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: TextField(
-                controller: myDescription,
-                decoration: const InputDecoration(hintText: "Description"),
-              )),
-          ElevatedButton(
-            onPressed: () {
-              wares.add(Ware(myName.text, myDescription.text));
-              Navigator.pop(
-                  context); // Navigate back to first route when tapped.
-            },
-            child: const Text('Submit'),
-          ),
+      body: _pages[_selectedPageIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.inventory), label: "Potential Trades"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add), label: "Publish new Ware"),
+          BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
         ],
-      )),
+        currentIndex: _selectedPageIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
