@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 
 final wares = <Ware>[
-  Ware("1", "1des"),
-  Ware("2", "2des"),
-  Ware("3", "3des"),
-  Ware("4", "4des"),
-  Ware("5", "5des")
+  Ware("demo", "1", "1des"),
+  Ware("demo", "2", "2des"),
+  Ware("demo", "3", "3des"),
+  Ware("demo", "4", "4des"),
+  Ware("demo", "5", "5des")
 ];
 
 final marketWares = <Ware>[
-  Ware("1m", "1mdes"),
-  Ware("2m", "2mdes"),
-  Ware("3m", "3mdes"),
-  Ware("4m", "4mdes"),
-  Ware("5m", "5mdes")
+  Ware("trader1", "1m", "1mdes"),
+  Ware("trader1", "2m", "2mdes"),
+  Ware("trader1", "3m", "3mdes"),
+  Ware("trader1", "4m", "4mdes"),
+  Ware("trader1", "5m", "5mdes")
 ];
 
 final neighborMatches = <Match>[];
 
 final matches = <Match>[
-  Match("Neighbor 1", Ware("offer1", "offer1 description"), "demo", wares[0]),
-  Match("Neighbor 2", Ware("offer2", "offer2 description"), "demo", wares[3]),
-  Match("Neighbor 3", Ware("offer3", "offer3 description"), "demo", wares[4]),
+  Match(Ware("Neighbor 1", "offer1", "offer1 description"), wares[0]),
+  Match(Ware("Neighbor 2", "offer2", "offer2 description"), wares[3]),
+  Match(Ware("Neighbor 3", "offer3", "offer3 description"), wares[4]),
 ];
 
 class Ware {
   //defines the Ware class, a class that symbolizes an object for trade
   //TODO: include way to contain images
+  late String ownerName;
   late String name;
   late String description;
 
-  Ware(this.name, this.description);
+  Ware(this.ownerName, this.name, this.description);
 
   ListTile returnListTile() {
     //returns a ListTile containing the info of the Ware
@@ -74,7 +75,10 @@ class Match {
   late Ware bidWare;
   late Ware ownWare;
 
-  Match(this.bidder, this.bidWare, this.owner, this.ownWare);
+  Match(this.bidWare, this.ownWare) {
+    bidder = bidWare.ownerName;
+    owner = ownWare.ownerName;
+  }
 
   ListTile returnTile() {
     return ListTile(
@@ -86,12 +90,17 @@ class Match {
       //tileColor: Color.fromARGB(255, 91, 89, 89),
       //title: Text("Tradeoffer $index"),
       leading: Column(
-        children: [Text(bidWare.name), Text(bidWare.description)],
+        children: [
+          Text(bidder),
+          Text(style: const TextStyle(fontWeight: FontWeight.bold), bidWare.name)
+        ],
       ),
       trailing: Column(
-        children: [Text(ownWare.name), Text(ownWare.description)],
+        children: [
+          Text(owner),
+          Text(style: const TextStyle(fontWeight: FontWeight.bold), ownWare.name)
+        ],
       ),
-      subtitle: Center(child: Text("Bidder: $bidder     Owner Name: $owner")),
     );
   }
 }

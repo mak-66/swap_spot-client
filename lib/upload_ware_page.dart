@@ -47,8 +47,8 @@ class _UploadWareState extends State<UploadWare> {
               )),
           ElevatedButton(
             onPressed: () {
-              wares.add(Ware(myName.text,
-                  myDescription.text)); //TODO: implement add images
+              //TODO: make a way to access username
+              wares.add(Ware("Demo", myName.text, myDescription.text)); //TODO: implement add images
 
               //gives feedback
               showDialog(
