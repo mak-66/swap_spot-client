@@ -19,9 +19,9 @@ final marketWares = <Ware>[
 final neighborMatches = <Match>[];
 
 final matches = <Match>[
-  Match("Neighbor 1", Ware("offer1", "offer1 description"), wares[0]),
-  Match("Neighbor 2", Ware("offer2", "offer2 description"), wares[3]),
-  Match("Neighbor 3", Ware("offer3", "offer3 description"), wares[4]),
+  Match("Neighbor 1", Ware("offer1", "offer1 description"), "demo", wares[0]),
+  Match("Neighbor 2", Ware("offer2", "offer2 description"), "demo", wares[3]),
+  Match("Neighbor 3", Ware("offer3", "offer3 description"), "demo", wares[4]),
 ];
 
 class Ware {
@@ -53,8 +53,8 @@ class Ware {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          color: Color.fromARGB(255, 129, 129, 129),
+          borderRadius: const BorderRadius.all(const Radius.circular(5)),
+          color: const Color.fromARGB(255, 129, 129, 129),
           border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -66,10 +66,32 @@ class Ware {
 
 class Match {
   //defines the Match class, containing a potential trade between two users and a ware
-  String bidder = ""; //the name of the user who "swiped right"
-  String owner = "";
+
+  bool signed = false; // both parties "swiped right"
+
+  late String bidder; //the name of the user who "swiped right" first
+  late String owner;
   late Ware bidWare;
   late Ware ownWare;
 
-  Match(this.bidder, this.bidWare, this.ownWare);
+  Match(this.bidder, this.bidWare, this.owner, this.ownWare);
+
+  ListTile returnTile() {
+    return ListTile(
+      //tile definition
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: Colors.black, width: 1),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      //tileColor: Color.fromARGB(255, 91, 89, 89),
+      //title: Text("Tradeoffer $index"),
+      leading: Column(
+        children: [Text(bidWare.name), Text(bidWare.description)],
+      ),
+      trailing: Column(
+        children: [Text(ownWare.name), Text(ownWare.description)],
+      ),
+      subtitle: Center(child: Text("Bidder: $bidder     Owner Name: $owner")),
+    );
+  }
 }

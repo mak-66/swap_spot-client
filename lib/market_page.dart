@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'ware_containers.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';

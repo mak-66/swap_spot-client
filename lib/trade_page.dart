@@ -18,25 +18,7 @@ class TradePage extends StatelessWidget {
         itemCount: matches.length,
         itemBuilder: (context, index) {
           final Match match = matches[index];
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: ListTile(
-              //tile definition
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.black, width: 1),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              //tileColor: Color.fromARGB(255, 91, 89, 89),
-              //title: Text("Tradeoffer $index"),
-              leading: Column(
-                children: [Text(match.bidWare.name), Text(match.bidWare.description)],
-              ),
-              trailing: Column(
-                children: [Text(match.ownWare.name), Text(match.ownWare.description)],
-              ),
-              subtitle: Text("Bidder: ${match.bidder}"),
-            ),
-          );
+          return Padding(padding: const EdgeInsets.all(15), child: match.returnTile());
         },
       )),
     );
