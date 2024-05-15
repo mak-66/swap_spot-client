@@ -53,9 +53,9 @@ class Ware {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: Color.fromARGB(255, 129, 129, 129),
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          color: Color.fromARGB(255, 129, 129, 129),
+          border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Text(name), Text(description)],
@@ -67,6 +67,7 @@ class Ware {
 class Match {
   //defines the Match class, containing a potential trade between two users and a ware
   String bidder = ""; //the name of the user who "swiped right"
+  String owner = "";
   late Ware bidWare;
   late Ware ownWare;
 
