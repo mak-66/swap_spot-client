@@ -4,7 +4,7 @@ import 'ware_containers.dart';
 class TradePage extends StatelessWidget {
   //Page containing potential trades (matches)
   // const TradePage({super.key});
-  const TradePage({Key? key}) : super(key: key);
+  const TradePage({super.key});
 
   @override
   Widget build(BuildContext context) {

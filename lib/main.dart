@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
         ],
         selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Color.fromARGB(255, 88, 87, 87),
+        unselectedItemColor: const Color.fromARGB(255, 88, 87, 87),
         currentIndex: _selectedPageIndex,
         onTap: _onItemTapped,
       ),

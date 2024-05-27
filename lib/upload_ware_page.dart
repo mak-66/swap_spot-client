@@ -12,6 +12,7 @@ class UploadWare extends StatefulWidget {
 class _UploadWareState extends State<UploadWare> {
   final myName = TextEditingController();
   final myDescription = TextEditingController();
+  final myImageURL = TextEditingController();
 
   @override
   void dispose() {
@@ -35,6 +36,13 @@ class _UploadWareState extends State<UploadWare> {
           Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               child: TextField(
+                controller: myImageURL,
+                decoration: const InputDecoration(hintText: "Image URL"),
+                maxLines: 1,
+              )),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: TextField(
                 controller: myName,
                 decoration: const InputDecoration(hintText: "Name"),
                 maxLines: 1,
@@ -48,7 +56,8 @@ class _UploadWareState extends State<UploadWare> {
           ElevatedButton(
             onPressed: () {
               //TODO: make a way to access username
-              wares.add(Ware("Demo", myName.text, myDescription.text)); //TODO: implement add images
+              wares.add(Ware("Demo", myName.text, myDescription.text,
+                  myImageURL.text)); //TODO: implement add images
 
               //gives feedback
               showDialog(

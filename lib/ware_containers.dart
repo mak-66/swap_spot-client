@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 
+var errorImageURL =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsuAz91VMk31tS5FlfEUghtFgHgZlMjL1lnIztR7tM9Q&s";
+
 final wares = <Ware>[
-  Ware("demo", "1", "1des"),
-  Ware("demo", "2", "2des"),
-  Ware("demo", "3", "3des"),
-  Ware("demo", "4", "4des"),
-  Ware("demo", "5", "5des")
+  Ware("demo", "1", "1des", errorImageURL),
+  Ware("demo", "2", "2des", errorImageURL),
+  Ware("demo", "3", "3des", errorImageURL),
+  Ware("demo", "4", "4des", errorImageURL),
+  Ware("demo", "5", "5des", errorImageURL)
 ];
 
 final marketWares = <Ware>[
-  Ware("trader1", "1m", "1mdes"),
-  Ware("trader1", "2m", "2mdes"),
-  Ware("trader1", "3m", "3mdes"),
-  Ware("trader1", "4m", "4mdes"),
-  Ware("trader1", "5m", "5mdes")
+  Ware("trader1", "1m", "1mdes", errorImageURL),
+  Ware("trader1", "2m", "2mdes", errorImageURL),
+  Ware("trader1", "3m", "3mdes", errorImageURL),
+  Ware("trader1", "4m", "4mdes", errorImageURL),
+  Ware("trader1", "5m", "5mdes", errorImageURL)
 ];
 
 final neighborMatches = <Match>[];
 
 final matches = <Match>[
-  Match(Ware("Neighbor 1", "offer1", "offer1 description"), wares[0]),
-  Match(Ware("Neighbor 2", "offer2", "offer2 description"), wares[3]),
-  Match(Ware("Neighbor 3", "offer3", "offer3 description"), wares[4]),
+  Match(Ware("Neighbor 1", "offer1", "offer1 description", errorImageURL), wares[0]),
+  Match(Ware("Neighbor 2", "offer2", "offer2 description", errorImageURL), wares[3]),
+  Match(Ware("Neighbor 3", "offer3", "offer3 description", errorImageURL), wares[4]),
 ];
 
 class Ware {
@@ -30,8 +33,9 @@ class Ware {
   late String ownerName;
   late String name;
   late String description;
+  late String imageURL;
 
-  Ware(this.ownerName, this.name, this.description);
+  Ware(this.ownerName, this.name, this.description, this.imageURL);
 
   ListTile returnListTile() {
     //returns a ListTile containing the info of the Ware
@@ -54,12 +58,12 @@ class Ware {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(const Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
           color: const Color.fromARGB(255, 129, 129, 129),
           border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text(name), Text(description)],
+        children: [Text(name), Text(description), Image.network(imageURL)],
       ),
     );
   }
