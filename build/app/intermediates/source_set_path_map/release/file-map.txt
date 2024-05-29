@@ -1,7 +1,7 @@
-com.example.swap_spot.app-jetified-window-1.0.0-beta04-0 C:\Users\Elmsk\.gradle\caches\transforms-3\032f4dff274e516110d9363a9793a3e3\transformed\jetified-window-1.0.0-beta04\res
-com.example.swap_spot.app-jetified-window-java-1.0.0-beta04-1 C:\Users\Elmsk\.gradle\caches\transforms-3\142c24f2530665bb6deb4123ab140714\transformed\jetified-window-java-1.0.0-beta04\res
-com.example.swap_spot.app-core-1.6.0-2 C:\Users\Elmsk\.gradle\caches\transforms-3\2579a7de00054bf46a8dbc332552f622\transformed\core-1.6.0\res
-com.example.swap_spot.app-jetified-annotation-experimental-1.1.0-3 C:\Users\Elmsk\.gradle\caches\transforms-3\3f96ca76068ab400b494bc7d541ee256\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.swap_spot.app-core-1.6.0-0 C:\Users\Elmsk\.gradle\caches\transforms-3\284a410c767ad6c7a2b0ffc8d8d85981\transformed\core-1.6.0\res
+com.example.swap_spot.app-jetified-window-java-1.0.0-beta04-1 C:\Users\Elmsk\.gradle\caches\transforms-3\2a215381204751055df81b6269e717b7\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.swap_spot.app-jetified-annotation-experimental-1.1.0-2 C:\Users\Elmsk\.gradle\caches\transforms-3\3d2f03fc996c2e0aa3dee5cfa3002cd1\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.swap_spot.app-jetified-window-1.0.0-beta04-3 C:\Users\Elmsk\.gradle\caches\transforms-3\f302e75fb7efd781bcf1a29281c188da\transformed\jetified-window-1.0.0-beta04\res
 com.example.swap_spot.app-main-4 D:\Coding\Programs\swap_spot-client\android\app\src\main\res
 com.example.swap_spot.app-release-5 D:\Coding\Programs\swap_spot-client\android\app\src\release\res
 com.example.swap_spot.app-pngs-6 D:\Coding\Programs\swap_spot-client\build\app\generated\res\pngs\release

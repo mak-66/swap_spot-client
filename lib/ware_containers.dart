@@ -29,7 +29,7 @@ final matches = <Match>[
 
 class Ware {
   //defines the Ware class, a class that symbolizes an object for trade
-  //TODO: include way to contain images
+  //TODO: include way to contain images (Currently only the link)
   late String ownerName;
   late String name;
   late String description;
@@ -49,6 +49,7 @@ class Ware {
       tileColor: const Color.fromARGB(255, 213, 209, 209),
       title: Text(name),
       subtitle: Text(description),
+      trailing: SizedBox(height: 20, width: 20, child: Image.network(imageURL)),
     );
   }
 
@@ -63,7 +64,11 @@ class Ware {
           border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text(name), Text(description), Image.network(imageURL)],
+        children: [
+          Text(name),
+          Text(description),
+          SizedBox(width: 60, height: 60, child: Image.network(imageURL))
+        ],
       ),
     );
   }

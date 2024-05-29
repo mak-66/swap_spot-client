@@ -78,6 +78,9 @@ class _MarketPageState extends State<MarketPage> {
           });
       //Create a check to see if the match already exists
       //exists -> move to messaging process, else create "pending" match
+      debugPrint(
+          'Match created: (${marketWares[previousIndex].ownerName}, ${marketWares[previousIndex].name}) + (${selectedWare?.ownerName}, ${selectedWare?.name})');
+      //TODO:for testing purposes,
       return true;
     }
     return true;
