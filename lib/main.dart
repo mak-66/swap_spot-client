@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pocketbase/pocketbase.dart';
+
+import 'ware_containers.dart';
 import 'upload_ware_page.dart';
 import 'trade_page.dart';
 import 'ware_page.dart';
@@ -6,8 +9,36 @@ import 'market_page.dart';
 
 //TODO: Figure out the app icon
 
+//Creates the pocketbase handle
+const pbURL = "https://swap-spot.pockethost.io/";
+var pBase = PocketBase(pbURL);
+
+//Creates the handle for the user
+late RecordModel user;
+
 void main() {
   runApp(const MyApp());
+}
+
+Future<void> getUser(String userID) async {
+  try {
+    user = await pBase.collection('users').getOne(userID);
+    loadUser(pBase, user);
+    debugPrint(user.toString());
+  } catch (e) {
+    debugPrint('Error fetching user: \n$e');
+  }
+}
+
+Future<void> printWare(String wareID) async {
+  try {
+    var record = await pBase.collection('Market_Wares').getOne(wareID);
+
+    // Print owner's username
+    debugPrint('Owner Username: ${record.getDataValue<String>('Owner_Username')}');
+  } catch (e) {
+    debugPrint('Error fetching record: \n$e');
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -19,42 +50,93 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SwapSpot App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 126, 79, 208)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Swapspot v0.1'),
+      home: const LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String _loginText = "Please enter login data";
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    // Perform login operation using Pocketbase
+    String username = _userController.text;
+    String password = _passwordController.text;
+    try {
+      //throws an error if login information isn't good
+      await pBase.collection("users").authWithPassword(username, password);
+      //prints if authdata was good
+      if (pBase.authStore.isValid) {
+        debugPrint("logging in as $username (${pBase.authStore.model.id})");
+        //fetches a record of the user after they have been validated
+        await getUser(pBase.authStore.model.id);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyHomePage(title: username, pBase: pBase, user: user)));
+      }
+      //pushes context to the home page
+    } catch (e) {
+      // Handles login error
+      debugPrint('Error Logging in (User: $username || Pass: $password): \n$e');
+      setState(() {
+        _loginText = 'Error logging in. Please try again.';
+      });
+      _userController.clear();
+      _passwordController.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login to SwapSpot v0.2'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(_loginText),
+            TextField(
+              controller: _userController,
+              decoration: const InputDecoration(labelText: 'Username'),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _login,
+              child: const Text('Login'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+  const MyHomePage({super.key, required this.title, required this.pBase, required this.user});
   final String title;
+  final PocketBase pBase;
+  final RecordModel user;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -63,10 +145,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedPageIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
+  static final List<Widget> _pages = <Widget>[
     TradePage(),
     MarketPage(),
-    UploadWare(),
+    UploadWare(pBase: pBase, user: user),
     WarePage(),
   ];
 

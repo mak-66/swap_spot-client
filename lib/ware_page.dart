@@ -17,8 +17,7 @@ class WarePage extends StatelessWidget {
         itemCount: wares.length,
         itemBuilder: (context, index) {
           final ware = wares[index];
-          return Padding(
-              padding: const EdgeInsets.all(15), child: ware.returnListTile());
+          return Padding(padding: const EdgeInsets.all(15), child: ware.returnListTile());
         },
       )),
     );

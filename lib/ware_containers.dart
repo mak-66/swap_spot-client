@@ -1,41 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:pocketbase/pocketbase.dart';
 
 var errorImageURL =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsuAz91VMk31tS5FlfEUghtFgHgZlMjL1lnIztR7tM9Q&s";
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnF5Ip7CNRSfeynWCl1uNBFhWtA_cKW-dNrQ&s";
 
-final wares = <Ware>[
-  Ware("demo", "1", "1des", errorImageURL),
-  Ware("demo", "2", "2des", errorImageURL),
-  Ware("demo", "3", "3des", errorImageURL),
-  Ware("demo", "4", "4des", errorImageURL),
-  Ware("demo", "5", "5des", errorImageURL)
+List<Ware> wares = <Ware>[];
+
+final matches = <Match>[
+  Match(Ware("Neighbor 1", "1", "offer1", "offer1 description", errorImageURL), marketWares[0]),
+  Match(Ware("Neighbor 2", '1', "offer2", "offer2 description", errorImageURL), marketWares[3]),
+  Match(Ware("Neighbor 3", '1', "offer3", "offer3 description", errorImageURL), marketWares[2]),
 ];
 
 final marketWares = <Ware>[
-  Ware("trader1", "1m", "1mdes", errorImageURL),
-  Ware("trader1", "2m", "2mdes", errorImageURL),
-  Ware("trader1", "3m", "3mdes", errorImageURL),
-  Ware("trader1", "4m", "4mdes", errorImageURL),
-  Ware("trader1", "5m", "5mdes", errorImageURL)
+  Ware("trader1", '1', "1m", "1mdes", errorImageURL),
+  Ware("trader1", '1', "2m", "2mdes", errorImageURL),
+  Ware("trader1", '1', "3m", "3mdes", errorImageURL),
+  Ware("trader1", '1', "4m", "4mdes", errorImageURL),
+  Ware("trader1", '1', "5m", "5mdes", errorImageURL)
 ];
 
-final neighborMatches = <Match>[];
+Future<void> loadUser(PocketBase pBase, RecordModel user) async {
+  //takes the user record and fills out the user's wares and matched trades
+  loadWares(pBase, user);
+}
 
-final matches = <Match>[
-  Match(Ware("Neighbor 1", "offer1", "offer1 description", errorImageURL), wares[0]),
-  Match(Ware("Neighbor 2", "offer2", "offer2 description", errorImageURL), wares[3]),
-  Match(Ware("Neighbor 3", "offer3", "offer3 description", errorImageURL), wares[4]),
-];
+Future<void> loadWares(PocketBase pBase, RecordModel user) async {
+  wares.clear();
+  //fetch a record containing all user owned wares
+  try {
+    final wareRecords =
+        await pBase.collection('Market_Wares').getFullList(filter: 'Owner = "${user.id}"');
+    //debugPrint(waresRecord.toString());
+    //adds the wares into the wares list
+    for (var curWare in wareRecords) {
+      wares.add(Ware(user.getStringValue('name'), user.id, curWare.getStringValue('Name'),
+          curWare.getStringValue('Description'), curWare.getStringValue('Image_URL')));
+    }
+  } catch (e) {
+    debugPrint("Error fetching user: $e");
+  }
+}
+
+//TODO: load market wares
 
 class Ware {
   //defines the Ware class, a class that symbolizes an object for trade
   //TODO: include way to contain images (Currently only the link)
   late String ownerName;
+  late String ownerID;
   late String name;
   late String description;
   late String imageURL;
 
-  Ware(this.ownerName, this.name, this.description, this.imageURL);
+  Ware(this.ownerName, this.ownerID, this.name, this.description, this.imageURL);
 
   ListTile returnListTile() {
     //returns a ListTile containing the info of the Ware
@@ -49,7 +67,7 @@ class Ware {
       tileColor: const Color.fromARGB(255, 213, 209, 209),
       title: Text(name),
       subtitle: Text(description),
-      trailing: SizedBox(height: 20, width: 20, child: Image.network(imageURL)),
+      trailing: SizedBox(height: 60, width: 60, child: Image.network(imageURL)),
     );
   }
 
@@ -60,14 +78,14 @@ class Ware {
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: const Color.fromARGB(255, 129, 129, 129),
+          color: Color.fromARGB(255, 212, 210, 210),
           border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(name),
           Text(description),
-          SizedBox(width: 60, height: 60, child: Image.network(imageURL))
+          SizedBox(width: 100, height: 100, child: Image.network(imageURL))
         ],
       ),
     );
