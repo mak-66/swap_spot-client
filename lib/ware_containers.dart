@@ -5,44 +5,8 @@ var errorImageURL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnF5Ip7CNRSfeynWCl1uNBFhWtA_cKW-dNrQ&s";
 
 List<Ware> wares = <Ware>[];
-
-final matches = <Match>[
-  Match(Ware("Neighbor 1", "1", "offer1", "offer1 description", errorImageURL), marketWares[0]),
-  Match(Ware("Neighbor 2", '1', "offer2", "offer2 description", errorImageURL), marketWares[3]),
-  Match(Ware("Neighbor 3", '1', "offer3", "offer3 description", errorImageURL), marketWares[2]),
-];
-
-final marketWares = <Ware>[
-  Ware("trader1", '1', "1m", "1mdes", errorImageURL),
-  Ware("trader1", '1', "2m", "2mdes", errorImageURL),
-  Ware("trader1", '1', "3m", "3mdes", errorImageURL),
-  Ware("trader1", '1', "4m", "4mdes", errorImageURL),
-  Ware("trader1", '1', "5m", "5mdes", errorImageURL)
-];
-
-Future<void> loadUser(PocketBase pBase, RecordModel user) async {
-  //takes the user record and fills out the user's wares and matched trades
-  loadWares(pBase, user);
-}
-
-Future<void> loadWares(PocketBase pBase, RecordModel user) async {
-  wares.clear();
-  //fetch a record containing all user owned wares
-  try {
-    final wareRecords =
-        await pBase.collection('Market_Wares').getFullList(filter: 'Owner = "${user.id}"');
-    //debugPrint(waresRecord.toString());
-    //adds the wares into the wares list
-    for (var curWare in wareRecords) {
-      wares.add(Ware(user.getStringValue('name'), user.id, curWare.getStringValue('Name'),
-          curWare.getStringValue('Description'), curWare.getStringValue('Image_URL')));
-    }
-  } catch (e) {
-    debugPrint("Error fetching user: $e");
-  }
-}
-
-//TODO: load market wares
+List<Match> matches = <Match>[];
+List<Ware> marketWares = <Ware>[];
 
 class Ware {
   //defines the Ware class, a class that symbolizes an object for trade
@@ -78,11 +42,12 @@ class Ware {
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5)),
-          color: Color.fromARGB(255, 212, 210, 210),
+          color: const Color.fromARGB(255, 212, 210, 210),
           border: Border.all(color: Colors.black)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(ownerID),
           Text(name),
           Text(description),
           SizedBox(width: 100, height: 100, child: Image.network(imageURL))

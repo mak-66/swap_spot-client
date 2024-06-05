@@ -1,50 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-import 'ware_containers.dart';
 import 'upload_ware_page.dart';
 import 'trade_page.dart';
 import 'ware_page.dart';
 import 'market_page.dart';
+import 'user_loading.dart';
 
 //TODO: Figure out the app icon
 
 //Creates the pocketbase handle
-const pbURL = "https://swap-spot.pockethost.io/";
-var pBase = PocketBase(pbURL);
+const String pbURL = "https://swap-spot.pockethost.io/";
+PocketBase pBase = PocketBase(pbURL);
 
-//Creates the handle for the user
+//handle for user data
 late RecordModel user;
 
 void main() {
   runApp(const MyApp());
 }
 
-Future<void> getUser(String userID) async {
-  try {
-    user = await pBase.collection('users').getOne(userID);
-    loadUser(pBase, user);
-    debugPrint(user.toString());
-  } catch (e) {
-    debugPrint('Error fetching user: \n$e');
-  }
-}
-
-Future<void> printWare(String wareID) async {
-  try {
-    var record = await pBase.collection('Market_Wares').getOne(wareID);
-
-    // Print owner's username
-    debugPrint('Owner Username: ${record.getDataValue<String>('Owner_Username')}');
-  } catch (e) {
-    debugPrint('Error fetching record: \n$e');
-  }
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,20 +48,24 @@ class _LoginPageState extends State<LoginPage> {
   String _loginText = "Please enter login data";
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   Future<void> _login() async {
-    // Perform login operation using Pocketbase
+    // Perform login operation using Pocketbase, happens after user presses submit
     String username = _userController.text;
     String password = _passwordController.text;
+    setState(() {
+      _isLoading = true; // Start loading
+    });
     try {
       //throws an error if login information isn't good
       await pBase.collection("users").authWithPassword(username, password);
       //prints if authdata was good
       if (pBase.authStore.isValid) {
-        debugPrint("logging in as $username (${pBase.authStore.model.id})");
-        //fetches a record of the user after they have been validated
-        await getUser(pBase.authStore.model.id);
-        Navigator.push(
+        // debugPrint("logging in as $username (${pBase.authStore.model.id})");
+        //fetches a record of the user after they have been validated and loads all relevant data
+        user = await getUser(pBase, pBase.authStore.model.id);
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => MyHomePage(title: username, pBase: pBase, user: user)));
@@ -93,41 +76,44 @@ class _LoginPageState extends State<LoginPage> {
       debugPrint('Error Logging in (User: $username || Pass: $password): \n$e');
       setState(() {
         _loginText = 'Error logging in. Please try again.';
+        _isLoading = false;
       });
-      _userController.clear();
-      _passwordController.clear();
     }
+    _userController.clear();
+    _passwordController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login to SwapSpot v0.2'),
+        title: const Text('Login to SwapSpot v0.3'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(_loginText),
-            TextField(
-              controller: _userController,
-              decoration: const InputDecoration(labelText: 'Username'),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(_loginText),
+                  TextField(
+                    controller: _userController,
+                    decoration: const InputDecoration(labelText: 'Username'),
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _login,
+                    child: const Text('Login'),
+                  ),
+                ],
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _login,
-              child: const Text('Login'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -146,10 +132,10 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedPageIndex = 0;
 
   static final List<Widget> _pages = <Widget>[
-    TradePage(),
-    MarketPage(),
-    UploadWare(pBase: pBase, user: user),
-    WarePage(),
+    const TradePage(),
+    MarketPage(pBase: pBase, user: user), //passes in the pocketbase and user for context
+    UploadWare(pBase: pBase, user: user), //same here; necessary to update the server easily
+    const WarePage(),
   ];
 
   void _onItemTapped(int index) {

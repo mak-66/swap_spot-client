@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'ware_containers.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'ware_containers.dart';
+import 'user_loading.dart';
 
 class UploadWare extends StatefulWidget {
   //The page displayed when a user tries to create a new ware posting
@@ -17,6 +18,7 @@ class UploadWare extends StatefulWidget {
 class _UploadWareState extends State<UploadWare> {
   final myName = TextEditingController();
   final myDescription = TextEditingController();
+  //TODO: Change from a URL to an actual image
   final myImageURL = TextEditingController();
 
   @override
@@ -24,11 +26,12 @@ class _UploadWareState extends State<UploadWare> {
     // Clean up the controller when the widget is disposed.
     myName.dispose();
     myDescription.dispose();
+    myImageURL.dispose();
     super.dispose();
   }
 
   Future<void> _createWare() async {
-    //TODO: make this update the database
+    //updates the database and the local wares list with the new Ware
     final wareInfo = <String, dynamic>{
       "Owner": widget.user.id,
       "Name": myName.text,
@@ -36,9 +39,13 @@ class _UploadWareState extends State<UploadWare> {
       "Image_URL": myImageURL.text
     };
     debugPrint(wareInfo.toString());
+
     await widget.pBase.collection('Market_Wares').create(body: wareInfo);
+
     wares.add(Ware(widget.user.getStringValue('name'), widget.user.id, myName.text,
         myDescription.text, myImageURL.text));
+
+    loadWares(widget.pBase, widget.user);
   }
 
   @override

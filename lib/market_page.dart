@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'ware_containers.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 class MarketPage extends StatefulWidget {
-  const MarketPage({super.key});
+  const MarketPage({super.key, required this.pBase, required this.user});
+
+  final PocketBase pBase;
+  final RecordModel user;
 
   @override
   State<MarketPage> createState() => _MarketPageState();
@@ -13,13 +17,6 @@ class _MarketPageState extends State<MarketPage> {
   final CardSwiperController cardController = CardSwiperController();
 
   List<Container> cards = marketWares.map((mWare) => mWare.returnContainer()).toList();
-  // List<Container> cards = <Container>[
-  //   marketWares[0].returnContainer(),
-  //   marketWares[1].returnContainer(),
-  //   marketWares[2].returnContainer(),
-  //   marketWares[3].returnContainer(),
-  //   marketWares[4].returnContainer(),
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +42,7 @@ class _MarketPageState extends State<MarketPage> {
   }
 
   //I hate dart function convention
+  //TODO: make reactive to matches and create them if necessary
   Future<bool> _cardSwiped(
     int previousIndex,
     int? currentIndex,
