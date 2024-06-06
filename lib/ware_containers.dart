@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pocketbase/pocketbase.dart';
 
-var errorImageURL =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnF5Ip7CNRSfeynWCl1uNBFhWtA_cKW-dNrQ&s";
-
+//local storage of data fetched from server to minimize api calls
 List<Ware> wares = <Ware>[];
 List<Match> matches = <Match>[];
 List<Ware> marketWares = <Ware>[];
