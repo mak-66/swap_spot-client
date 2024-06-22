@@ -70,10 +70,10 @@ library {
   maven_library {
     groupId: "io.flutter"
     artifactId: "flutter_embedding_release"
-    version: "1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"
+    version: "1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"
   }
   digests {
-    sha256: "\001\313\343tC`4\355\324J\276\257aq&\bF\375\341!u2\316\253\027n\032\320-\022\ny"
+    sha256: "\254\232\260\021\237g#\315?;2@4\357:\310[\355\212\232\333\254\360\305\027\200\326\314\275\244\343\b"
   }
   repo_index {
     value: 2
@@ -383,10 +383,10 @@ library {
   maven_library {
     groupId: "io.flutter"
     artifactId: "armeabi_v7a_release"
-    version: "1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"
+    version: "1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"
   }
   digests {
-    sha256: "=<\337\n%C\361\274\002v%{4\371\204H\3218<\204\371\2511\270Or\003\347\352<B*"
+    sha256: "\266\223\337F0N\306^\3646Z\005Qm\022\016A\372\376I,\373\222\322\267X\363\2740\235\301\'"
   }
   repo_index {
     value: 2
@@ -396,10 +396,10 @@ library {
   maven_library {
     groupId: "io.flutter"
     artifactId: "arm64_v8a_release"
-    version: "1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"
+    version: "1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"
   }
   digests {
-    sha256: "\271\253\326\242\000\301q\345\224\237\355\220\233*\377\r\202v\301m\210\275Kk\224\370D\324\267%\327\357"
+    sha256: "\223\311\004\021Tu\243\260\277\n~V~\266\300L\232\025GAW\262(}\323:\005\016\370\2122\247"
   }
   repo_index {
     value: 2
@@ -409,10 +409,10 @@ library {
   maven_library {
     groupId: "io.flutter"
     artifactId: "x86_64_release"
-    version: "1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"
+    version: "1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"
   }
   digests {
-    sha256: "H\331\356;[+Npp\2728d5\203\"\264E\243\352F1\367UF=3Irm\004\253\347"
+    sha256: "`\342z]\027\003\034nQ(\273X\334@+Z\v\353Mr\271\212\344\252}D\v&9t\035\255"
   }
   repo_index {
     value: 2
@@ -420,7 +420,7 @@ library {
 }
 library {
   digests {
-    sha256: "\216\257;d\233}~a\262\324\'\373\217\033\302\r\3506\222M\223!\nl<\253t\377\332*\262\177"
+    sha256: "\t\2262\371\321@\333\220\333\003RM7i\247Y!\3330\213+I\312\375\031\025\214\253m\177vA"
   }
 }
 library_dependencies {

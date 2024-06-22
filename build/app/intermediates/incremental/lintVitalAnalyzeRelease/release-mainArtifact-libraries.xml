@@ -4,9 +4,9 @@
       jars="D:\Coding\Programs\swap_spot-client\build\app\intermediates\flutter\release\libs.jar"
       resolved="__local_aars__:D:\Coding\Programs\swap_spot-client\build\app\intermediates\flutter\release\libs.jar:unspecified"/>
   <library
-      name="io.flutter:flutter_embedding_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d@jar"
-      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\flutter_embedding_release\1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d\fc6a0eb79ea6f9f5b76545ede277bbbdab10b125\flutter_embedding_release-1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d.jar"
-      resolved="io.flutter:flutter_embedding_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"/>
+      name="io.flutter:flutter_embedding_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4@jar"
+      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\flutter_embedding_release\1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4\a9fdc27004af28867fae3e3f6a954f860a8f1fbe\flutter_embedding_release-1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4.jar"
+      resolved="io.flutter:flutter_embedding_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"/>
   <library
       name="androidx.window:window-java:1.0.0-beta04@aar"
       jars="C:\Users\Elmsk\.gradle\caches\transforms-3\2a215381204751055df81b6269e717b7\transformed\jetified-window-java-1.0.0-beta04\jars\classes.jar"
@@ -46,17 +46,17 @@
       jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.7.10\d70d7d2c56371f7aa18f32e984e3e2e998fe9081\kotlin-stdlib-jdk8-1.7.10.jar"
       resolved="org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"/>
   <library
-      name="io.flutter:armeabi_v7a_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d@jar"
-      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\armeabi_v7a_release\1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d\5e9d03663f812d2967104ca5b66007dfce1f4f73\armeabi_v7a_release-1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d.jar"
-      resolved="io.flutter:armeabi_v7a_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"/>
+      name="io.flutter:armeabi_v7a_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4@jar"
+      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\armeabi_v7a_release\1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4\f4092cadb1487bc12bb6b1d1b25bb5fff978f7f8\armeabi_v7a_release-1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4.jar"
+      resolved="io.flutter:armeabi_v7a_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"/>
   <library
-      name="io.flutter:arm64_v8a_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d@jar"
-      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\arm64_v8a_release\1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d\88195c35b8a2cb676a249b24b356f1f51d6cf047\arm64_v8a_release-1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d.jar"
-      resolved="io.flutter:arm64_v8a_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"/>
+      name="io.flutter:arm64_v8a_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4@jar"
+      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\arm64_v8a_release\1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4\8c839a87a5a75c0fc1ceaec9f37facb445a8986f\arm64_v8a_release-1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4.jar"
+      resolved="io.flutter:arm64_v8a_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"/>
   <library
-      name="io.flutter:x86_64_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d@jar"
-      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\x86_64_release\1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d\76c3da2f27bbf2950241475aaf6a45b085b0337a\x86_64_release-1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d.jar"
-      resolved="io.flutter:x86_64_release:1.0.0-55eae6864b296dd9f43b2cc7577ec256e5c32a8d"/>
+      name="io.flutter:x86_64_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4@jar"
+      jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\io.flutter\x86_64_release\1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4\a7307813a8dd5ca27197392e0278c9743977628f\x86_64_release-1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4.jar"
+      resolved="io.flutter:x86_64_release:1.0.0-edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4"/>
   <library
       name="org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10@jar"
       jars="C:\Users\Elmsk\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.7.10\1ef73fee66f45d52c67e2aca12fd945dbe0659bf\kotlin-stdlib-jdk7-1.7.10.jar"

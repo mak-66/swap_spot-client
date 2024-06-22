@@ -3,8 +3,8 @@
 # min_api: 21
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.0"}
-# pg_map_id: 93b2f82
-# pg_map_hash: SHA-256 93b2f827c9c71913a94839896f91a9a825ae2fce08e61f9564518cc3fa4a0002
+# pg_map_id: 118c58b
+# pg_map_hash: SHA-256 118c58bbd58eaee0c6fcc2e93d95105c32811a5f219a44754be39b63d9c7cfa7
 android.app.AppComponentFactory -> android.app.AppComponentFactory:
 # {"id":"com.android.tools.r8.synthesized"}
     void <clinit>() -> <clinit>
@@ -3032,8 +3032,9 @@ io.flutter.plugin.platform.PlatformViewsController -> io.flutter.plugin.platform
     android.util.SparseArray platformViews -> k
     java.lang.Class[] VIEW_TYPES_REQUIRE_VIRTUAL_DISPLAY -> w
     long access$800(io.flutter.plugin.platform.PlatformViewsController,io.flutter.plugin.platform.PlatformView,io.flutter.embedding.engine.systemchannels.PlatformViewsChannel$PlatformViewCreationRequest) -> A
-    boolean validateDirection(int) -> A0
+    void unlockInputConnection(io.flutter.plugin.platform.VirtualDisplayController) -> A0
     android.util.SparseArray access$900(io.flutter.plugin.platform.PlatformViewsController) -> B
+    boolean validateDirection(int) -> B0
     void attach(android.content.Context,io.flutter.view.TextureRegistry,io.flutter.embedding.engine.dart.DartExecutor) -> C
     void attachTextInputPlugin(io.flutter.plugin.editing.TextInputPlugin) -> D
     void attachToFlutterRenderer(io.flutter.embedding.engine.renderer.FlutterRenderer) -> E
@@ -3113,7 +3114,7 @@ io.flutter.plugin.platform.PlatformViewsController -> io.flutter.plugin.platform
     java.lang.Class[] access$600() -> y
     int toPhysicalPixels(double) -> y0
     boolean access$700(io.flutter.plugin.platform.PlatformViewsController) -> z
-    void unlockInputConnection(io.flutter.plugin.platform.VirtualDisplayController) -> z0
+    void translateMotionEvent(android.view.MotionEvent,android.view.MotionEvent$PointerCoords[]) -> z0
 io.flutter.plugin.platform.PlatformViewsController$$ExternalSyntheticLambda0 -> io.flutter.plugin.platform.r:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}

@@ -55,7 +55,7 @@ class Ware {
 }
 
 class Match {
-  //defines the Match class, containing a potential trade between two users and a ware
+  //defines the Match class, containing a potential trade between two users and a their wares
 
   bool signed = false; // both parties "swiped right"
 
@@ -70,6 +70,7 @@ class Match {
   }
 
   ListTile returnTile() {
+    //returns the match in ListTile format
     return ListTile(
       //tile definition
       shape: RoundedRectangleBorder(

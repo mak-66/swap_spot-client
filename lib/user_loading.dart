@@ -13,6 +13,7 @@ Future<RecordModel> getUser(PocketBase pBase, String userID) async {
       loadWares(pBase, user),
       loadMarket(pBase, user),
     ]);
+    //TODO: add potential matches into market wares as well
     debugPrint(user.toString());
     return user;
   } catch (e) {

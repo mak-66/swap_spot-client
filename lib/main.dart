@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
       // Handles login error
       debugPrint('Error Logging in (User: $username || Pass: $password): \n$e');
       setState(() {
-        _loginText = 'Error logging in. Please try again.';
+        _loginText = 'Error logging in. Please try again. (Error: $e)';
         _isLoading = false;
       });
     }
