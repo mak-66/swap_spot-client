@@ -81,9 +81,9 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
       //TODO: make for loop concurrently request from the server for optimization
       //represents the wares belonging to the initiator and receiver
       Ware initWare; //the ware being created
-      var initHandle; //the recordmodel of the ware as stored by the server
+      RecordModel? initHandle; //the recordmodel of the ware as stored by the server
       Ware recWare;
-      var recHandle;
+      RecordModel? recHandle;
 
       RecordModel traderInfo; //info of the non-current-user in the match
 
@@ -111,16 +111,22 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
         }
         // debugPrint("\nTraderInfo: $traderInfo");
         //define the initWare based on info from the initHandle
-        initWare = Ware(
-            initName,
-            initHandle.getStringValue('Owner'),
-            initHandle.getStringValue('Name'),
-            initHandle.getStringValue('Description'),
-            initHandle.getStringValue('Image_URL'));
-        //define the recWare based on recHandle
-        recWare = Ware(recName, recHandle.getStringValue('Owner'), recHandle.getStringValue('Name'),
-            recHandle.getStringValue('Description'), recHandle.getStringValue('Image_URL'));
-        matches.add(Match(initWare, recWare));
+        if (initHandle != null && recHandle != null) {
+          initWare = Ware(
+              initName,
+              initHandle.getStringValue('Owner'),
+              initHandle.getStringValue('Name'),
+              initHandle.getStringValue('Description'),
+              initHandle.getStringValue('Image_URL'));
+          //define the recWare based on recHandle
+          recWare = Ware(
+              recName,
+              recHandle.getStringValue('Owner'),
+              recHandle.getStringValue('Name'),
+              recHandle.getStringValue('Description'),
+              recHandle.getStringValue('Image_URL'));
+          matches.add(Match(initWare, recWare));
+        }
       }
     }
   } catch (e) {
