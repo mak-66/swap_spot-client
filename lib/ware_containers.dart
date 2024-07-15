@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 //local storage of data fetched from server to minimize api calls
 List<Ware> wares = <Ware>[];
 List<Match> matches = <Match>[];
+List<Match> reciprocatedMatches = <Match>[];
 List<Ware> marketWares = <Ware>[];
 
 class Ware {
   //defines the Ware class, a class that symbolizes an object for trade
   //TODO: include way to contain images (Currently only the link)
+  late String ID;
   late String ownerName;
   late String ownerID;
   late String name;
   late String description;
   late String imageURL;
 
-  Ware(this.ownerName, this.ownerID, this.name, this.description, this.imageURL);
+  Ware(this.ID, this.ownerName, this.ownerID, this.name, this.description, this.imageURL);
+
+  //for debugging purposes
+  void debugPrintSelf() {
+    debugPrint("ID: $ID\nOwner: $ownerName\nOwnerID: $ownerID\nWare Name: $name\n");
+  }
 
   ListTile returnListTile() {
     //returns a ListTile containing the info of the Ware
@@ -57,16 +64,22 @@ class Ware {
 class Match {
   //defines the Match class, containing a potential trade between two users and a their wares
 
-  bool signed = false; // both parties "swiped right"
+  bool reciprocated = false; // both parties "swiped right"
 
+  late String ID;
   late String bidder; //the name of the user who "swiped right" first
   late String owner;
   late Ware bidWare;
   late Ware ownWare;
 
-  Match(this.bidWare, this.ownWare) {
+  Match(this.ID, this.bidWare, this.ownWare) {
     bidder = bidWare.ownerName;
     owner = ownWare.ownerName;
+  }
+
+  void debugPrintSelf() {
+    debugPrint(
+        "Match ID: $ID\nBidder: $bidder\nBidWare: ${bidWare.ID}\nOwner: $owner\nOwnWare: ${ownWare.ID}\n");
   }
 
   ListTile returnTile() {

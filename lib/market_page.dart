@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:swap_spot/main.dart';
+import 'package:swap_spot/user_loading.dart';
 import 'ware_containers.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
@@ -43,7 +45,6 @@ class _MarketPageState extends State<MarketPage> {
   }
 
   //I hate dart function convention
-  //TODO: make reactive to matches and create them if necessary
   Future<bool> _cardSwiped(
     int previousIndex,
     int? currentIndex,
@@ -54,7 +55,9 @@ class _MarketPageState extends State<MarketPage> {
     );
     if (direction.name == "right") {
       //if user liked the ware
-      List<Ware>? selectedWares = await showDialog<List<Ware>>(
+      //NOTE: This casts the result of the dialog and so may introduce complications. Need to verify that the user selected something.
+      //TODO: Verify selection
+      List<Ware> selectedWares = await showDialog<List<Ware>>(
           //pop up a dialog prompting the user for what wares they would offer
           context: context,
           builder: (BuildContext context) {
@@ -98,34 +101,40 @@ class _MarketPageState extends State<MarketPage> {
                 );
               },
             );
-          });
+          }) as List<Ware>;
 
       //selectedWares now contains the wares the user would trade for the selected market ware
 
       Ware selectedMarketWare = marketWares[previousIndex];
       // selectedMarketWare now contains the market ware the user swiped right on
 
-      if (selectedWares != null) {
-        bool found = false;
-        for (Ware ware in selectedWares) {
-          //check to see if the match already exists
-          for (Match match in matches) {
-            if ((ware == match.bidWare && selectedMarketWare == match.ownWare) ||
-                (ware == match.ownWare && selectedMarketWare == match.bidWare)) {
-              found = true;
-              //the match already exists -> change match.reciprocated to true, update everything
-            }
+      bool found;
+      for (Ware ware in selectedWares) {
+        debugPrint(
+            "\n----processing swipe----\nWareID: ${ware.ID}\nSelectedID: ${selectedMarketWare.ID}\n");
+        found = false;
+        //check to see if the match already exists
+        for (Match match in matches) {
+          if ((ware.ID == match.bidWare.ID && selectedMarketWare.ID == match.ownWare.ID) ||
+              (ware.ID == match.ownWare.ID && selectedMarketWare.ID == match.bidWare.ID)) {
+            found = true;
+            //the match already exists -> change match.reciprocated to true, update everything
+            match.reciprocated = true;
+            debugPrint("Found existing match:${match.ID}");
+            final body = <String, dynamic>{"Reciprocated": true}; //defines the message
+            await pBase.collection("Potential_Matches").update(match.ID, body: body);
+            loadMatches(pBase, user);
+            //TODO: create new match notification
           }
-          if (found == false) {
-            //match does not exist yet -> create new potential match
-          }
-          found = false;
+        }
+        if (found == false) {
+          //Create the new match object
+          debugPrint("Not found, creating....");
         }
       }
 
       //exists -> move to messaging process, else create "pending" match
 
-      //TODO:for testing purposes,
       return true;
     }
     return true;

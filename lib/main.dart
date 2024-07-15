@@ -8,6 +8,7 @@ import 'market_page.dart';
 import 'user_loading.dart';
 
 //TODO: Figure out the app icon
+//TODO: make it so that users can only modify data pertaining to them
 
 //Creates the pocketbase handle
 const String pbURL = "https://swap-spot.pockethost.io/";

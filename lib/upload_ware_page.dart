@@ -40,10 +40,12 @@ class _UploadWareState extends State<UploadWare> {
     };
     debugPrint(wareInfo.toString());
 
-    await widget.pBase.collection('Market_Wares').create(body: wareInfo);
+    final wareRecord = await widget.pBase.collection('Market_Wares').create(body: wareInfo);
 
-    wares.add(Ware(widget.user.getStringValue('name'), widget.user.id, myName.text,
-        myDescription.text, myImageURL.text));
+    //fetches the served decided id for the ware
+    //TODO: look into deciding id s for the server? seems like a can of worms
+    wares.add(Ware(wareRecord.getStringValue('id'), widget.user.getStringValue('name'),
+        widget.user.id, myName.text, myDescription.text, myImageURL.text));
 
     loadWares(widget.pBase, widget.user);
   }

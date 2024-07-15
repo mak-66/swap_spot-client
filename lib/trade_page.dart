@@ -6,6 +6,8 @@ class TradePage extends StatelessWidget {
   // const TradePage({super.key});
   const TradePage({super.key});
 
+  //creates a list of reciprocated matches from the matches list
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +17,9 @@ class TradePage extends StatelessWidget {
       body: Center(
           child: ListView.builder(
         //scrollable list containing tiles containing info on each ware
-        itemCount: matches.length,
+        itemCount: reciprocatedMatches.length,
         itemBuilder: (context, index) {
-          final Match match = matches[index];
+          final Match match = reciprocatedMatches[index];
           return Padding(padding: const EdgeInsets.all(15), child: match.returnTile());
         },
       )),
