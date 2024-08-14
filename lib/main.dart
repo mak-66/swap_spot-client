@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 
+import 'registration_page.dart';
 import 'upload_ware_page.dart';
 import 'trade_page.dart';
 import 'ware_page.dart';
@@ -51,6 +52,14 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
+  Future<void> _newUser() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => RegistrationPage(pBase: pBase),
+        ));
+  }
+
   Future<void> _login() async {
     // Perform login operation using Pocketbase, happens after user presses submit
     String username = _userController.text;
@@ -59,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true; // Start loading
     });
     try {
+      pBase.authStore.clear(); // clears any previous user logged in
       //throws an error if login information isn't good
       await pBase.collection("users").authWithPassword(username, password);
       //prints if authdata was good
@@ -66,10 +76,19 @@ class _LoginPageState extends State<LoginPage> {
         // debugPrint("logging in as $username (${pBase.authStore.model.id})");
         //fetches a record of the user after they have been validated and loads all relevant data
         user = await getUser(pBase, pBase.authStore.model.id);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyHomePage(title: username, pBase: pBase, user: user)));
+        if (user.getBoolValue('verified')) {
+          //if the user has been verified
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyHomePage(title: username, pBase: pBase, user: user)));
+        } else {
+          //else, display that they need to be verified
+          setState(() {
+            _loginText = 'Error logging in. User not verified';
+            _isLoading = false;
+          });
+        }
       }
       //pushes context to the home page
     } catch (e) {
@@ -108,9 +127,15 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _login,
-                    child: const Text('Login'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(onPressed: _newUser, child: const Text('Register')),
+                      ElevatedButton(
+                        onPressed: _login,
+                        child: const Text('Login'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -130,10 +155,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //determines the starting page
   int _selectedPageIndex = 0;
 
   static final List<Widget> _pages = <Widget>[
-    const TradePage(),
+    TradePage(pBase: pBase, user: user),
     MarketPage(pBase: pBase, user: user), //passes in the pocketbase and user for context
     UploadWare(pBase: pBase, user: user), //same here; necessary to update the server easily
     const WarePage(),

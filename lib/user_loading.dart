@@ -9,6 +9,7 @@ Future<RecordModel> getUser(PocketBase pBase, String userID) async {
     RecordModel user = await pBase.collection('users').getOne(userID);
     //runs list of three loading functions, waiting for the slowest to complete (THIS IS AMAZING)
     await Future.wait([
+      //TODO: fetch market IDs user is member of function
       loadMatches(pBase, user),
       loadWares(pBase, user),
       loadMarket(pBase, user),
@@ -31,17 +32,17 @@ Future<void> loadWares(PocketBase pBase, RecordModel user) async {
     final wareRecords =
         await pBase.collection('Market_Wares').getFullList(filter: 'Owner = "${user.id}"');
 
-    debugPrint("- - - - Fetching Wares - - - -\n");
+    // debugPrint("- - - - Fetching Wares - - - -\n");
     //adds the wares into the wares list
     for (var curWare in wareRecords) {
       //doing assignment shenanigans to print out the newWare being added
-      //TODO: remove newWare variable complication after debugging
       newWare = Ware(
           curWare.id,
           user.getStringValue('name'),
           user.id,
           curWare.getStringValue('Name'),
           curWare.getStringValue('Description'),
+          curWare.created,
           curWare.getStringValue('Image_URL'));
       wares.add(newWare);
       // newWare.debugPrintSelf();
@@ -61,16 +62,16 @@ Future<void> loadMarket(PocketBase pBase, RecordModel user) async {
         //fetches all wares not owned by user, TODO: make this filter based on party
         await pBase.collection('Market_Wares').getFullList(filter: 'Owner != "${user.id}"');
     //adds the wares into the wares list
-    debugPrint("- - - - Fetching Market - - - -\n");
+    // debugPrint("- - - - Fetching Market - - - -\n");
     for (var curWare in marketWareRecords) {
       //doing assignment shenanigans to print out the newMarketWare being added
-      //TODO: remove newMarketWare variable complication after debugging
       newMarketWare = Ware(
           curWare.id,
           "Open Market", //filler for owner name
           curWare.getStringValue('Owner'), //owner id
           curWare.getStringValue('Name'), //ware name
           curWare.getStringValue('Description'),
+          curWare.created,
           curWare.getStringValue('Image_URL'));
       marketWares.add(newMarketWare);
       // newMarketWare.debugPrintSelf();
@@ -81,6 +82,7 @@ Future<void> loadMarket(PocketBase pBase, RecordModel user) async {
 }
 
 Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
+  reciprocatedMatches.clear();
   matches.clear();
   try {
     final matchRecords =
@@ -130,6 +132,7 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
               initHandle.getStringValue('Owner'),
               initHandle.getStringValue('Name'),
               initHandle.getStringValue('Description'),
+              initHandle.created,
               initHandle.getStringValue('Image_URL'));
           //define the recWare based on recHandle
           recWare = Ware(
@@ -138,11 +141,13 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
               recHandle.getStringValue('Owner'),
               recHandle.getStringValue('Name'),
               recHandle.getStringValue('Description'),
+              recHandle.created,
               recHandle.getStringValue('Image_URL'));
 
           newMatch = Match(curMatch.id, initWare, recWare);
           if (curMatch.getBoolValue('Reciprocated')) {
             // debugPrint("Creating reciprocated match with ID: ${curMatch.id}\n");
+            // newMatch.debugPrintSelf();
             newMatch.reciprocated = true;
           } else {
             // debugPrint("Creating pending match with ID: ${curMatch.id}\n");
@@ -152,9 +157,9 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
       }
     }
     reciprocatedMatches = matches.where((x) => x.reciprocated).toList();
-    for (Match x in matches) {
-      x.debugPrintSelf();
-    }
+    // for (Match x in matches) {
+    //   x.debugPrintSelf();
+    // }
   } catch (e) {
     debugPrint("Error fetching matches: $e");
   }

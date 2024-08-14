@@ -45,7 +45,7 @@ class _UploadWareState extends State<UploadWare> {
     //fetches the served decided id for the ware
     //TODO: look into deciding id s for the server? seems like a can of worms
     wares.add(Ware(wareRecord.getStringValue('id'), widget.user.getStringValue('name'),
-        widget.user.id, myName.text, myDescription.text, myImageURL.text));
+        widget.user.id, myName.text, myDescription.text, wareRecord.created, myImageURL.text));
 
     loadWares(widget.pBase, widget.user);
   }

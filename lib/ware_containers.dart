@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_page.dart';
 
 //local storage of data fetched from server to minimize api calls
 List<Ware> wares = <Ware>[];
@@ -15,8 +16,10 @@ class Ware {
   late String name;
   late String description;
   late String imageURL;
+  late String timeCreated;
 
-  Ware(this.ID, this.ownerName, this.ownerID, this.name, this.description, this.imageURL);
+  Ware(this.ID, this.ownerName, this.ownerID, this.name, this.description, this.timeCreated,
+      this.imageURL);
 
   //for debugging purposes
   void debugPrintSelf() {
@@ -33,7 +36,7 @@ class Ware {
         borderRadius: BorderRadius.circular(5),
       ),
       tileColor: const Color.fromARGB(255, 213, 209, 209),
-      title: Text(name),
+      title: Text("$name ($timeCreated)"),
       subtitle: Text(description),
       trailing: SizedBox(height: 60, width: 60, child: Image.network(imageURL)),
     );
@@ -82,28 +85,33 @@ class Match {
         "Match ID: $ID\nBidder: $bidder\nBidWare: ${bidWare.ID}\nOwner: $owner\nOwnWare: ${ownWare.ID}\n");
   }
 
-  ListTile returnTile() {
-    //returns the match in ListTile format
-    return ListTile(
-      //tile definition
-      shape: RoundedRectangleBorder(
-        side: const BorderSide(color: Colors.black, width: 1),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      //tileColor: Color.fromARGB(255, 91, 89, 89),
-      //title: Text("Tradeoffer $index"),
-      leading: Column(
-        children: [
-          Text(bidder),
-          Text(style: const TextStyle(fontWeight: FontWeight.bold), bidWare.name)
-        ],
-      ),
-      trailing: Column(
-        children: [
-          Text(owner),
-          Text(style: const TextStyle(fontWeight: FontWeight.bold), ownWare.name)
-        ],
-      ),
-    );
-  }
+  // ListTile returnTile() {
+  //   //returns the match in ListTile format
+  //   return ListTile(
+  //     //tile definition
+  //     shape: RoundedRectangleBorder(
+  //       side: const BorderSide(color: Colors.black, width: 1),
+  //       borderRadius: BorderRadius.circular(5),
+  //     ),
+  //     //tileColor: Color.fromARGB(255, 91, 89, 89),
+  //     //title: Text("Tradeoffer $index"),
+  //     leading: Row(
+  //       children: [
+  //         Column(
+  //           children: [
+  //             Text(bidder),
+  //             Text(style: const TextStyle(fontWeight: FontWeight.bold), bidWare.name)
+  //           ],
+  //         ),
+  //         // TODO: implement way to display sellers contact
+  //       ],
+  //     ),
+  //     trailing: Column(
+  //       children: [
+  //         Text(owner),
+  //         Text(style: const TextStyle(fontWeight: FontWeight.bold), ownWare.name)
+  //       ],
+  //     ),
+  //   );
+  // }
 }
