@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'profile_page.dart';
 
 //local storage of data fetched from server to minimize api calls
 List<Ware> wares = <Ware>[];
 List<Match> matches = <Match>[];
 List<Match> reciprocatedMatches = <Match>[];
 List<Ware> marketWares = <Ware>[];
+
+Ware errorWare =
+    Ware('ERROR IN WARE CREATION', 'ERROR', 'ERROR', 'ERROR', 'ERROR', 'ERROR', 'ERROR');
+Match errorMatch = Match('ERROR IN MATCH CREATION', errorWare, errorWare);
 
 class Ware {
   //defines the Ware class, a class that symbolizes an object for trade

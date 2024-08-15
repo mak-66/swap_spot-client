@@ -53,7 +53,7 @@ class TradePage extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 10), //spacing
-          ElevatedButton(onPressed: _displayTradeProfile, child: const Icon(Icons.open_in_browser)),
+          ElevatedButton(onPressed: _displayTradeProfile, child: const Icon(Icons.person_search)),
           const SizedBox(width: 10), //spacing
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

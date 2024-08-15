@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:swap_spot/profile_page.dart';
 
 import 'registration_page.dart';
 import 'upload_ware_page.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SwapSpot App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 126, 79, 208)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 156, 79, 208)),
         useMaterial3: true,
       ),
       home: const LoginPage(),
@@ -81,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MyHomePage(title: username, pBase: pBase, user: user)));
+                  builder: (context) =>
+                      MyHomePage(title: "Logged in as $username", pBase: pBase, user: user)));
         } else {
           //else, display that they need to be verified
           setState(() {
@@ -163,6 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
     MarketPage(pBase: pBase, user: user), //passes in the pocketbase and user for context
     UploadWare(pBase: pBase, user: user), //same here; necessary to update the server easily
     const WarePage(),
+    ProfilePage(pBase: pBase, user: user)
   ];
 
   void _onItemTapped(int index) {
@@ -198,6 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: "Publish new Ware"),
           BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: "Profile")
         ],
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: const Color.fromARGB(255, 88, 87, 87),

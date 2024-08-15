@@ -92,69 +92,11 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
             filter: '(Initiator = "${user.id}" || Receiver = "${user.id}")');
 
     if (matchRecords.isNotEmpty) {
-      //TODO: make for loop concurrently request from the server for optimization
-
-      //represents the wares belonging to the initiator and receiver -> create the local match object
-      Ware initWare; //the ware being created
-      RecordModel? initHandle; //the recordmodel of the ware as stored by the server
-      Ware recWare;
-      RecordModel? recHandle;
-
-      RecordModel traderInfo; //info of the non-current-user in the match
-
-      Match newMatch;
-
-      String initName; //name of initiator
-      String recName; //name of receiver
-      for (var curMatch in matchRecords) {
-        //get handles onto the ware information
-        initHandle = curMatch.expand['Init_Ware']?.first;
-        recHandle = curMatch.expand['Rec_Ware']?.first;
-        //gets the info of the other member("trader") of the match
-        if (curMatch.getStringValue('Initiator') == user.id) {
-          //if the user was the initiator of the trade, get the profile of the receiver
-          traderInfo = await pBase.collection('users').getOne(curMatch.getStringValue('Receiver'));
-          //sets names accordingly
-          initName = user.getStringValue('name');
-          recName = traderInfo.getStringValue('Name');
-        } else {
-          //get the profile of the initiator
-          traderInfo = await pBase.collection('users').getOne(curMatch.getStringValue('Initiator'));
-          //set names accordingly
-          initName = traderInfo.getStringValue('Name');
-          recName = user.getStringValue('name');
-        }
-        //define the initWare based on info from the initHandle
-        if (initHandle != null && recHandle != null) {
-          initWare = Ware(
-              initHandle.id,
-              initName,
-              initHandle.getStringValue('Owner'),
-              initHandle.getStringValue('Name'),
-              initHandle.getStringValue('Description'),
-              initHandle.created,
-              initHandle.getStringValue('Image_URL'));
-          //define the recWare based on recHandle
-          recWare = Ware(
-              recHandle.id,
-              recName,
-              recHandle.getStringValue('Owner'),
-              recHandle.getStringValue('Name'),
-              recHandle.getStringValue('Description'),
-              recHandle.created,
-              recHandle.getStringValue('Image_URL'));
-
-          newMatch = Match(curMatch.id, initWare, recWare);
-          if (curMatch.getBoolValue('Reciprocated')) {
-            // debugPrint("Creating reciprocated match with ID: ${curMatch.id}\n");
-            // newMatch.debugPrintSelf();
-            newMatch.reciprocated = true;
-          } else {
-            // debugPrint("Creating pending match with ID: ${curMatch.id}\n");
-          }
-          matches.add(newMatch);
-        }
-      }
+      //Parallelized
+      matches = await Future.wait([
+        for (int i = 0; i < matchRecords.length; i++)
+          _futureFetchMatch(pBase, user, matchRecords[i])
+      ]);
     }
     reciprocatedMatches = matches.where((x) => x.reciprocated).toList();
     // for (Match x in matches) {
@@ -162,5 +104,71 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
     // }
   } catch (e) {
     debugPrint("Error fetching matches: $e");
+  }
+}
+
+Future<Match> _futureFetchMatch(PocketBase pBase, RecordModel user, RecordModel curMatch) async {
+  //represents the wares belonging to the initiator and receiver -> create the local match object
+  Ware initWare; //the ware being created
+  RecordModel? initHandle; //the recordmodel of the ware as stored by the server
+  Ware recWare;
+  RecordModel? recHandle;
+
+  RecordModel traderInfo; //info of the non-current-user in the match
+
+  Match newMatch;
+
+  String initName; //name of initiator
+  String recName; //name of receiver
+
+  //get handles onto the ware information
+  initHandle = curMatch.expand['Init_Ware']?.first;
+  recHandle = curMatch.expand['Rec_Ware']?.first;
+  //gets the info of the other member("trader") of the match
+  if (curMatch.getStringValue('Initiator') == user.id) {
+    //if the user was the initiator of the trade, get the profile of the receiver
+    traderInfo = await pBase.collection('users').getOne(curMatch.getStringValue('Receiver'));
+    //sets names accordingly
+    initName = user.getStringValue('name');
+    recName = traderInfo.getStringValue('Name');
+  } else {
+    //get the profile of the initiator
+    traderInfo = await pBase.collection('users').getOne(curMatch.getStringValue('Initiator'));
+    //set names accordingly
+    initName = traderInfo.getStringValue('Name');
+    recName = user.getStringValue('name');
+  }
+  //define the initWare based on info from the initHandle
+  if (initHandle != null && recHandle != null) {
+    initWare = Ware(
+        initHandle.id,
+        initName,
+        initHandle.getStringValue('Owner'),
+        initHandle.getStringValue('Name'),
+        initHandle.getStringValue('Description'),
+        initHandle.created,
+        initHandle.getStringValue('Image_URL'));
+    //define the recWare based on recHandle
+    recWare = Ware(
+        recHandle.id,
+        recName,
+        recHandle.getStringValue('Owner'),
+        recHandle.getStringValue('Name'),
+        recHandle.getStringValue('Description'),
+        recHandle.created,
+        recHandle.getStringValue('Image_URL'));
+
+    newMatch = Match(curMatch.id, initWare, recWare);
+    if (curMatch.getBoolValue('Reciprocated')) {
+      // debugPrint("Creating reciprocated match with ID: ${curMatch.id}\n");
+      // newMatch.debugPrintSelf();
+      newMatch.reciprocated = true;
+    } else {
+      // debugPrint("Creating pending match with ID: ${curMatch.id}\n");
+    }
+    return newMatch;
+  } else {
+    // one of the handles is null
+    throw 'user_loading.dart -> _futureFetchMatches(): initHandle or recHandle was null';
   }
 }
