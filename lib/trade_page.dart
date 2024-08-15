@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'ware_containers.dart';
 
+// ignore: must_be_immutable
 class TradePage extends StatelessWidget {
   //Page containing potential trades (matches)
   // const TradePage({super.key});
@@ -86,21 +87,24 @@ class TradePage extends StatelessWidget {
     showDialog(
       context: tradePageContext,
       builder: (BuildContext tradePageContext) => AlertDialog(
-        title: Text(trader.getStringValue("${trader.getStringValue("username")}'s trade profile")),
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Contact: ${trader.getStringValue("Phone_Number")}"),
-            Flexible(
-                child: FractionallySizedBox(
-              widthFactor: 0.8,
-              heightFactor: 0.01,
-              child: Container(
-                color: Theme.of(tradePageContext).primaryColor,
+        title: Text("${trader.getStringValue("username")}'s trade profile"),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Contact: ${trader.getStringValue("Contact")}"),
+              Text("Contact Platform: ${trader.getStringValue("Contact_Platform")}"),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  height: 1,
+                  color: Colors.black,
+                ),
               ),
-            )),
-            Text(trader.getStringValue("Bio"))
-          ],
+              Text(trader.getStringValue("Bio"))
+            ],
+          ),
         ),
         actions: <Widget>[
           TextButton(onPressed: () => Navigator.pop(tradePageContext), child: const Text("Ok"))

@@ -14,8 +14,10 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
+  final TextEditingController _contactPlatformController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -26,8 +28,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (_formKey.currentState!.validate()) {
       //if the formkey indicates that its fields are all valid
       String username = _usernameController.text;
+      String name = _nameController.text;
       String email = _emailController.text;
-      String phoneNumber = _phoneController.text;
+      String contact = _contactController.text;
+      String contactPlatform = _contactPlatformController.text;
       String password = _passwordController.text;
       String passwordConfirm = _passwordConfirmController.text;
 
@@ -37,15 +41,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       RecordModel publicProfileRecord = await widget.pBase
           .collection('Public_Profiles')
-          .create(body: {'Name': username, 'Contact': phoneNumber});
+          .create(body: {'Name': username, 'Contact': contact});
 
       try {
         await widget.pBase.collection('users').create(body: {
           'username': username,
-          'name': username,
+          'name': name,
           'email': email,
           'Profile': publicProfileRecord.id,
-          'Phone_Number': phoneNumber,
+          'Contact': contact,
+          'Contact_Platform': contactPlatform,
           'password': password,
           'passwordConfirm': passwordConfirm,
         });
@@ -78,78 +83,106 @@ class _RegistrationPageState extends State<RegistrationPage> {
           : Padding(
               //else, do this
               padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(_registrationText),
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(labelText: 'Username'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a username';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
-                        } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _phoneController,
-                      decoration: const InputDecoration(labelText: 'Phone Number'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an phone number';
-                        } else if (!RegExp(r'^(\(\d{3}\)\s?|\d{3}[-.\s]?)?\d{3}[-.\s]?\d{4}$')
-                            .hasMatch(value)) {
-                          return 'Please enter a valid phone number';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters long';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _passwordConfirmController,
-                      decoration: const InputDecoration(labelText: 'Retype Your Password'),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value != _passwordController.text) {
-                          return 'Password does not match';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _register,
-                      child: const Text('Register'),
-                    ),
-                  ],
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(_registrationText),
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: const InputDecoration(labelText: 'Username'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a username';
+                          } else if (!RegExp(r'^[a-zA-Z]+(_[a-zA-Z]+)*').hasMatch(value)) {
+                            //for future me
+                            //^[letter]+ : (starts with [at least one letter])
+                            //(_[char class]+)* : (_[at least one letter]) 0 or more times
+                            return 'Enter a valid username (Letters split by single underscores)';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(labelText: 'Display Name'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a display name';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an email';
+                          } else if (!RegExp(r'^[^@]+i@[^@]+\.[^@]+').hasMatch(value)) {
+                            // for future me
+                            // ^[^@]+ : starts with ([something that isn't '@'] 1 or more times)
+                            return 'Please enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: _contactController,
+                        decoration: const InputDecoration(labelText: 'Contact'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a preferred contact';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: _contactPlatformController,
+                        decoration: const InputDecoration(labelText: 'Contact Platform'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the platform of your contact';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(labelText: 'Password'),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a password';
+                          } else if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: _passwordConfirmController,
+                        decoration: const InputDecoration(labelText: 'Retype Your Password'),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please re-enter your password';
+                          } else if (value != _passwordController.text) {
+                            return 'Does not match the password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _register,
+                        child: const Text('Register'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

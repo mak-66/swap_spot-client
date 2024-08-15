@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'ware_containers.dart';
-import 'user_loading.dart';
 
 //TODO: Allow for editing of user data from this profile page.
 
@@ -42,8 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text("username: ${widget.user.getStringValue("username")}"),
                   Text("name: ${widget.user.getStringValue("name")}"),
                   Text("markets: ${widget.user.getListValue("Markets")}"),
-                  Text("Phone #: ${widget.user.getStringValue("Phone_Number")}"),
-                  Text("Preferred Contact: ${widget.user.getStringValue("preferred_contact")}"),
+                  Text("Contact: ${widget.user.getStringValue("Contact")}"),
+                  Text("Contact Platform: ${widget.user.getStringValue("Contact_Platform")}"),
                 ],
               ),
               Column(

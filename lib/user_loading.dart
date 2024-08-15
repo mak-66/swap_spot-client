@@ -6,6 +6,7 @@ Future<RecordModel> getUser(PocketBase pBase, String userID) async {
   //gets the user recordModel from the server and also calls loadUser, fetching all wares,
   //matches, and market wares available to the user
   try {
+    final Stopwatch getUserStopwatch = Stopwatch()..start();
     RecordModel user = await pBase.collection('users').getOne(userID);
     //runs list of three loading functions, waiting for the slowest to complete (THIS IS AMAZING)
     await Future.wait([
@@ -15,7 +16,10 @@ Future<RecordModel> getUser(PocketBase pBase, String userID) async {
       loadMarket(pBase, user),
     ]);
     //TODO: add potential matches into market wares as well
+    debugPrint("Finished loading from server in ${getUserStopwatch.elapsedMilliseconds}ms.");
+    getUserStopwatch.stop();
     debugPrint(user.toString());
+
     return user;
   } catch (e) {
     debugPrint('Error fetching user: \n$e');
@@ -26,6 +30,7 @@ Future<RecordModel> getUser(PocketBase pBase, String userID) async {
 Future<void> loadWares(PocketBase pBase, RecordModel user) async {
   //sets the local wares list to reflect what is on pBase
   wares.clear();
+  final Stopwatch loadWaresStopwatch = Stopwatch()..start();
   Ware newWare;
   //fetch a record containing all user owned wares
   try {
@@ -47,6 +52,9 @@ Future<void> loadWares(PocketBase pBase, RecordModel user) async {
       wares.add(newWare);
       // newWare.debugPrintSelf();
     }
+    debugPrint("Loaded user wares in ${loadWaresStopwatch.elapsedMilliseconds}ms.");
+    loadWaresStopwatch.stop();
+    return;
   } catch (e) {
     debugPrint("Error fetching user wares: $e");
   }
@@ -56,6 +64,7 @@ Future<void> loadMarket(PocketBase pBase, RecordModel user) async {
   //loads the open market of wares
   //TODO: make filter based on user parties
   marketWares.clear();
+  final Stopwatch loadMarketStopwatch = Stopwatch()..start();
   Ware newMarketWare;
   try {
     final marketWareRecords =
@@ -76,6 +85,9 @@ Future<void> loadMarket(PocketBase pBase, RecordModel user) async {
       marketWares.add(newMarketWare);
       // newMarketWare.debugPrintSelf();
     }
+    debugPrint("Loaded market in ${loadMarketStopwatch.elapsedMilliseconds}ms.");
+    loadMarketStopwatch.stop();
+    return;
   } catch (e) {
     debugPrint("Error fetching market wares: $e");
   }
@@ -85,6 +97,7 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
   reciprocatedMatches.clear();
   matches.clear();
   try {
+    final Stopwatch loadMatchesStopwatch = Stopwatch()..start();
     final matchRecords =
         //fetches all RECIPROCATED matches involving the user
         await pBase.collection('Potential_Matches').getFullList(
@@ -92,13 +105,16 @@ Future<void> loadMatches(PocketBase pBase, RecordModel user) async {
             filter: '(Initiator = "${user.id}" || Receiver = "${user.id}")');
 
     if (matchRecords.isNotEmpty) {
-      //Parallelized
+      //Parallelized to take only as long as the longest match fetch
       matches = await Future.wait([
         for (int i = 0; i < matchRecords.length; i++)
           _futureFetchMatch(pBase, user, matchRecords[i])
       ]);
     }
     reciprocatedMatches = matches.where((x) => x.reciprocated).toList();
+    debugPrint("Loaded matches in ${loadMatchesStopwatch.elapsedMilliseconds}ms.");
+    loadMatchesStopwatch.stop();
+    return;
     // for (Match x in matches) {
     //   x.debugPrintSelf();
     // }
