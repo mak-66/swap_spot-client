@@ -18,7 +18,7 @@ class MarketPage extends StatefulWidget {
 class _MarketPageState extends State<MarketPage> {
   final CardSwiperController cardController = CardSwiperController();
 
-  //defines the cards as the marketwares interspersed with the potential matches
+  //defines the cards as the marketwares
   List<Container> cards = marketWares.map((mWare) => mWare.returnContainer()).toList();
 
   @override
@@ -27,21 +27,25 @@ class _MarketPageState extends State<MarketPage> {
         appBar: AppBar(
           title: const Text('Market'),
         ),
-        body: Column(
-          children: [
-            Flexible(
-              //Contains a cardswiper, a framework for swipable, tinder-like cards
-              child: CardSwiper(
-                controller: cardController,
-                allowedSwipeDirection: const AllowedSwipeDirection.only(right: true, left: true),
-                cardsCount: cards.length,
-                onSwipe: _cardSwiped,
-                isLoop: false,
-                cardBuilder: (context, index, percentThresholdX, percentThresholdY) => cards[index],
-              ),
-            ),
-          ],
-        ));
+        body: cards.length > 1
+            ? Column(
+                children: [
+                  Flexible(
+                    //Contains a cardswiper, a framework for swipable, tinder-like cards
+                    child: CardSwiper(
+                      controller: cardController,
+                      allowedSwipeDirection:
+                          const AllowedSwipeDirection.only(right: true, left: true),
+                      cardsCount: cards.length,
+                      onSwipe: _cardSwiped,
+                      isLoop: false,
+                      cardBuilder: (context, index, percentThresholdX, percentThresholdY) =>
+                          cards[index],
+                    ),
+                  ),
+                ],
+              )
+            : const Text("No market wares"));
   }
 
   //I hate dart function convention
@@ -50,6 +54,12 @@ class _MarketPageState extends State<MarketPage> {
     int? currentIndex,
     CardSwiperDirection direction,
   ) async {
+    // marketWare contains the ware just swiped on
+    Ware marketWare = marketWares[previousIndex];
+
+    //update user profile to show that the user has seen all wares before this date
+    // final data = {"Market_Time": marketWare.timeCreated};
+    await pBase.collection('users').update(user.id, body: {"Market_Time": marketWare.timeCreated});
     if (direction.name == "right") {
       //if user liked the ware
       //NOTE: This casts the result of the dialog and so may introduce complications. Need to verify that the user selected something.
@@ -57,19 +67,15 @@ class _MarketPageState extends State<MarketPage> {
 
       //selectedWares now contains the wares the user would trade for the selected market ware
 
-      Ware selectedMarketWare = marketWares[previousIndex];
-      // selectedMarketWare now contains the market ware the user swiped right on
-
       bool matchMade = false;
       bool found;
       for (Ware ware in selectedWares) {
-        debugPrint(
-            "\n----processing swipe----\nWareID: ${ware.ID}\nSelectedID: ${selectedMarketWare.ID}");
+        debugPrint("\n----processing swipe----\nWareID: ${ware.ID}\nSelectedID: ${marketWare.ID}");
         //check to see if the match already exists
         found = false;
         for (Match match in matches) {
-          if ((ware.ID == match.bidWare.ID && selectedMarketWare.ID == match.ownWare.ID) ||
-              (ware.ID == match.ownWare.ID && selectedMarketWare.ID == match.bidWare.ID)) {
+          if ((ware.ID == match.bidWare.ID && marketWare.ID == match.ownWare.ID) ||
+              (ware.ID == match.ownWare.ID && marketWare.ID == match.bidWare.ID)) {
             matchMade = true; //marks that the entire swipe has had at least one match
             found = true;
             //the match already exists -> change match.reciprocated to true, update everything
@@ -85,26 +91,26 @@ class _MarketPageState extends State<MarketPage> {
           final body = <String, dynamic>{
             "Initiator": user.id,
             "Init_Ware": ware.ID,
-            "Receiver": selectedMarketWare.ownerID,
-            "Rec_Ware": selectedMarketWare.ID,
+            "Receiver": marketWare.ownerID,
+            "Rec_Ware": marketWare.ID,
             "Reciprocated": false
           };
           //creates the match in pocketbase while also fetching the new recordmodel, allowing access of the ID
           await pBase.collection('Potential_Matches').create(body: body);
 
           //creates the local match object and adds it to the list
-          // Match newMatch = Match(newMatchRecord.id, ware, selectedMarketWare);
+          // Match newMatch = Match(newMatchRecord.id, ware, marketWare);
           // matches.add(newMatch);
         }
       }
-      loadMatches(pBase, user);
+
       if (matchMade) {
         //Shows simple alert that a match was made
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AlertDialog(content: Text("Matched!"), actions: <Widget>[
-                TextButton(onPressed: Navigator.of(context).pop, child: Text("Ok!"))
+              return AlertDialog(content: const Text("Matched!"), actions: <Widget>[
+                TextButton(onPressed: Navigator.of(context).pop, child: const Text("Ok!"))
               ]);
             });
       }

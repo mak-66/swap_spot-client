@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SwapSpot App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 156, 79, 208)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 156, 79, 208)),
         useMaterial3: true,
       ),
       home: const LoginPage(),

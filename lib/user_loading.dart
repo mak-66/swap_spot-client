@@ -68,8 +68,10 @@ Future<void> loadMarket(PocketBase pBase, RecordModel user) async {
   Ware newMarketWare;
   try {
     final marketWareRecords =
-        //fetches all wares not owned by user, TODO: make this filter based on party
-        await pBase.collection('Market_Wares').getFullList(filter: 'Owner != "${user.id}"');
+        //fetches all wares not owned by user, past the market time that they have seen up to
+        //TODO: make this filter based on party
+        await pBase.collection('Market_Wares').getFullList(
+            filter: 'Owner != "${user.id}" && created > "${user.getStringValue("Market_Time")}"');
     //adds the wares into the wares list
     // debugPrint("- - - - Fetching Market - - - -\n");
     for (var curWare in marketWareRecords) {

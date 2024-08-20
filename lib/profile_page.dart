@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'profile_edit_page.dart';
 
 //TODO: Allow for editing of user data from this profile page.
 
@@ -31,26 +32,45 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         body: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("username: ${widget.user.getStringValue("username")}"),
-                  Text("name: ${widget.user.getStringValue("name")}"),
-                  Text("markets: ${widget.user.getListValue("Markets")}"),
-                  Text("Contact: ${widget.user.getStringValue("Contact")}"),
-                  Text("Contact Platform: ${widget.user.getStringValue("Contact_Platform")}"),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("username: ${widget.user.getStringValue("username")}"),
+                      Text("name: ${widget.user.getStringValue("name")}"),
+                      Text("markets: ${widget.user.getListValue("Markets")}"),
+                      Text("Contact: ${widget.user.getStringValue("Contact")}"),
+                      Text("Contact Platform: ${widget.user.getStringValue("Contact_Platform")}"),
+                    ],
+                  ),
+                  // TODO: implement edit button and page
+                  const Spacer(flex: 3),
+                  ElevatedButton(
+                      onPressed: _pushProfileEdit, child: const Icon(Icons.edit, size: 10)),
+                  const Spacer(),
                 ],
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [const Text('Bio'), Text(widget.user.getStringValue('Bio'))],
               )
             ],
           ),
+        ));
+  }
+
+  void _pushProfileEdit() {
+    Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) =>
+              ProfileEditPage(pBase: widget.pBase, user: widget.user),
         ));
   }
 }

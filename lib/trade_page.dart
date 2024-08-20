@@ -80,7 +80,7 @@ class TradePage extends StatelessWidget {
       traderID = match.ownWare.ownerID;
     }
     //fetch other party's info from the server
-    debugPrint("Fetching info on user with ID ${traderID}");
+    debugPrint("Fetching info on user with ID $traderID");
     RecordModel trader = await pBase.collection('users').getOne(traderID);
     debugPrint(trader.toString());
 
