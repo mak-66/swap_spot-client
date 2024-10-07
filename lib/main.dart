@@ -11,6 +11,7 @@ import 'user_loading.dart';
 
 //TODO: Figure out the app icon
 //TODO: make it so that users can only modify data pertaining to them
+//TODO: Move the homepage and login page into pages folder
 
 //Creates the pocketbase handle
 const String pbURL = "https://swap-spot.pockethost.io/";
@@ -40,9 +41,69 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title, required this.pBase, required this.user});
+  final String title;
+  final PocketBase pBase;
+  final RecordModel user;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  //determines the starting page
+  int _selectedPageIndex = 0;
+
+  //contains the list of pages for the homePage to navigate between
+  static final List<Widget> _pages = <Widget>[
+    TradePage(pBase: pBase, user: user),
+    MarketPage(pBase: pBase, user: user), //passes in the pocketbase and user for context
+    UploadWare(pBase: pBase, user: user), //same here; necessary to update the server easily
+    const WarePage(),
+    ProfilePage(pBase: pBase, user: user)
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: _pages[_selectedPageIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory),
+            label: "Potential Trades",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_business),
+            label: "Find new Matches",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Publish new Ware"),
+          BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: "Profile")
+        ],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: const Color.fromARGB(255, 88, 87, 87),
+        currentIndex: _selectedPageIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -142,72 +203,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.pBase, required this.user});
-  final String title;
-  final PocketBase pBase;
-  final RecordModel user;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  //determines the starting page
-  int _selectedPageIndex = 0;
-
-  static final List<Widget> _pages = <Widget>[
-    TradePage(pBase: pBase, user: user),
-    MarketPage(pBase: pBase, user: user), //passes in the pocketbase and user for context
-    UploadWare(pBase: pBase, user: user), //same here; necessary to update the server easily
-    const WarePage(),
-    ProfilePage(pBase: pBase, user: user)
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: _pages[_selectedPageIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory),
-            label: "Potential Trades",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_business),
-            label: "Find new Matches",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Publish new Ware"),
-          BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: "Profile")
-        ],
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: const Color.fromARGB(255, 88, 87, 87),
-        currentIndex: _selectedPageIndex,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
