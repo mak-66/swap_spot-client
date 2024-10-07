@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import '../ware_containers.dart';
-import '../user_loading.dart';
 
 class UploadWarePage extends StatefulWidget {
   //The page displayed when a user tries to create a new ware posting
