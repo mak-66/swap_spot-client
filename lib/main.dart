@@ -3,7 +3,6 @@ import 'package:pocketbase/pocketbase.dart';
 import 'package:swap_spot/pages/profile_page.dart';
 
 import 'pages/registration_page.dart';
-import 'pages/upload_ware_page.dart';
 import 'pages/trade_page.dart';
 import 'pages/ware_page.dart';
 import 'pages/market_page.dart';
@@ -59,8 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static final List<Widget> _pages = <Widget>[
     TradePage(pBase: pBase, user: user),
     MarketPage(pBase: pBase, user: user), //passes in the pocketbase and user for context
-    UploadWare(pBase: pBase, user: user), //same here; necessary to update the server easily
-    const WarePage(),
+    WarePage(pBase: pBase, user: user),
     ProfilePage(pBase: pBase, user: user)
   ];
 
@@ -89,7 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.add_business),
             label: "Find new Matches",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: "Publish new Ware"),
           BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Wares"),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: "Profile")
         ],

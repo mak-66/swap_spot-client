@@ -3,19 +3,20 @@ import 'package:pocketbase/pocketbase.dart';
 import '../ware_containers.dart';
 import '../user_loading.dart';
 
-class UploadWare extends StatefulWidget {
+class UploadWarePage extends StatefulWidget {
   //The page displayed when a user tries to create a new ware posting
-  const UploadWare({super.key, required this.pBase, required this.user});
+  UploadWarePage({super.key, required this.pBase, required this.user, required this.onWareCreated});
 
   //local handles for the pocketbase and the user
   final PocketBase pBase;
   final RecordModel user;
+  final VoidCallback onWareCreated;
 
   @override
-  State<UploadWare> createState() => _UploadWareState();
+  State<UploadWarePage> createState() => _UploadWarePageState();
 }
 
-class _UploadWareState extends State<UploadWare> {
+class _UploadWarePageState extends State<UploadWarePage> {
   final myName = TextEditingController();
   final myDescription = TextEditingController();
   //TODO: Change from a URL to an actual image
@@ -42,12 +43,12 @@ class _UploadWareState extends State<UploadWare> {
 
     final wareRecord = await widget.pBase.collection('Market_Wares').create(body: wareInfo);
 
-    //fetches the served decided id for the ware
-    //TODO: look into deciding id s for the server? seems like a can of worms
+    //fetches the server decided id for the ware
+    //TODO: look into deciding ids for the server? seems like a can of worms
     wares.add(Ware(wareRecord.getStringValue('id'), widget.user.getStringValue('name'),
         widget.user.id, myName.text, myDescription.text, wareRecord.created, myImageURL.text));
 
-    loadWares(widget.pBase, widget.user);
+    widget.onWareCreated();
   }
 
   @override
@@ -84,19 +85,7 @@ class _UploadWareState extends State<UploadWare> {
           ElevatedButton(
             onPressed: () {
               _createWare();
-              //gives feedback
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertDialog(
-                      title: Text('Ware Created'),
-                      content: Text('The ware has been successfully created.'),
-                    );
-                  });
-
-              //resets page
-              myName.text = "";
-              myDescription.text = "";
+              Navigator.pop(context);
             },
             child: const Text('Submit'),
           ),
