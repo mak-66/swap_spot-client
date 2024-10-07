@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:swap_spot/profile_page.dart';
+import 'package:swap_spot/pages/profile_page.dart';
 
-import 'registration_page.dart';
-import 'upload_ware_page.dart';
-import 'trade_page.dart';
-import 'ware_page.dart';
-import 'market_page.dart';
+import 'pages/registration_page.dart';
+import 'pages/upload_ware_page.dart';
+import 'pages/trade_page.dart';
+import 'pages/ware_page.dart';
+import 'pages/market_page.dart';
 import 'user_loading.dart';
 
 //TODO: Figure out the app icon

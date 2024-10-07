@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ware_containers.dart';
+import '../ware_containers.dart';
 
 class WarePage extends StatelessWidget {
   //displays the wares currently put on the market

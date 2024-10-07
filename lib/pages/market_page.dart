@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:swap_spot/main.dart';
-import 'package:swap_spot/user_loading.dart';
-import 'ware_containers.dart';
+import '../ware_containers.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
 class MarketPage extends StatefulWidget {

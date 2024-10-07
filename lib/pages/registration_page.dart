@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'main.dart';
+import '../main.dart';
 
 //TODO: set up email server to verify user emails (Sendinblue) -> verify the entire account
 

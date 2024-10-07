@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'ware_containers.dart';
+import '../ware_containers.dart';
 
 // ignore: must_be_immutable
 class TradePage extends StatelessWidget {
